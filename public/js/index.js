@@ -12,5 +12,5 @@ socket.on('disconnect',function(){
 });
 
 socket.on('newEmail',function(data){
-    console.log('Email received is ',data.text);
+    console.log('Broadcast received is ',JSON.stringify(data,undefined,2));
 });

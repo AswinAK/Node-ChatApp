@@ -13,13 +13,10 @@ var io = socketIO(server);
 io.on('connection',(socket)=>{
     console.log('New User Connectd!');
 
-    socket.emit('newEmail',{
-        "from":"dude2",
-        "text":"howdy??"
-    });
-
     socket.on('createEmail',(message)=>{
         console.log('Message from client is ',JSON.stringify(message,undefined,2));
+        message.time = new Date().getTime();
+        io.emit('newEmail',message)
     });
 
     socket.on('disconnect',()=>{
