@@ -1,4 +1,5 @@
 var socket = io();
+var map;
 socket.on('connect',function(){
     console.log('connection established..');
     
@@ -12,6 +13,26 @@ socket.on('incomingMessage',function(data){
     var li = jQuery('<li></li>');
     li.text(`${data.from}: ${data.text}`);
     jQuery('#mview').append(li);
+});
+
+socket.on('addLocation',function(data){
+    console.log('addLocation ',data);
+    console.log('map is ',map);
+    var myLatLng = {lat: data.text.latitude, lng: data.text.longitude}
+    console.log('adding ',myLatLng);
+
+    if(map==undefined){
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 2,
+            center: myLatLng
+        });
+    }
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: map,
+        label:'dodo',
+        title: 'Hello World!'
+    });
 });
 
 
@@ -30,9 +51,17 @@ jQuery("#loc-button").on('click',function(event){
         return alert('Geo Location not supported by your browser :(')
     }
     navigator.geolocation.getCurrentPosition(function(position){
-        console.log('location fetched is '+JSON.stringify(position,undefined,2));
+        console.log(position);
+        socket.emit('userLocation',{
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        });
     }
     ,function(err){
             alert('Unable to get location :( :(')
     });
 });
+
+function initMap() {
+
+}

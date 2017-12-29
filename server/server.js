@@ -24,6 +24,14 @@ io.on('connection',(socket)=>{
         if(callback)callback(100)
     });
 
+    socket.on('userLocation',(message,callback)=>{
+        console.log('Message from client is ',JSON.stringify(message,undefined,2));
+        message.time = new Date().getTime();
+        io.emit('incomingMessage',generateMessage('a user',`At latitude:${message.latitude} longitude:${message.longitude}`));
+        io.emit('addLocation',generateMessage('a user',message));
+        if(callback)callback(100)
+    });
+
     socket.on('disconnect',()=>{
         console.log('User Disconnected!');
     });
