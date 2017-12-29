@@ -23,4 +23,16 @@ jQuery("#message-form").on('submit',function(event){
     }, function(ack){
         console.log('ACK returned is '+ack)
     });
-})
+});
+
+jQuery("#loc-button").on('click',function(event){
+    if(!navigator.geolocation){
+        return alert('Geo Location not supported by your browser :(')
+    }
+    navigator.geolocation.getCurrentPosition(function(position){
+        console.log('location fetched is '+JSON.stringify(position,undefined,2));
+    }
+    ,function(err){
+            alert('Unable to get location :( :(')
+    });
+});
