@@ -21,7 +21,7 @@ io.on('connection',(socket)=>{
         console.log('Message from client is ',JSON.stringify(message,undefined,2));
         message.time = new Date().getTime();
         io.emit('incomingMessage',message);
-        if(callback)callback(100)
+        if(callback)callback()
     });
 
     socket.on('userLocation',(message,callback)=>{

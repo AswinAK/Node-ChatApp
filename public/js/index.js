@@ -1,5 +1,6 @@
 var socket = io();
 var map;
+var locationButton = jQuery("#loc-button");
 socket.on('connect',function(){
     console.log('connection established..');
     
@@ -41,20 +42,24 @@ jQuery("#message-form").on('submit',function(event){
     socket.emit('newMessage',{
         from:"abc@xyz.com",
         text:jQuery("#message-text").val()
-    }, function(ack){
-        console.log('ACK returned is '+ack)
+    }, function(){
+        console.log('ack received');
+        jQuery("#message-text").val('');
     });
 });
 
-jQuery("#loc-button").on('click',function(event){
+locationButton.on('click',function(event){
     if(!navigator.geolocation){
         return alert('Geo Location not supported by your browser :(')
     }
+    locationButton.attr('disabled','disabled').text('Sending Location...');
     navigator.geolocation.getCurrentPosition(function(position){
         console.log(position);
         socket.emit('userLocation',{
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
+        },function(){
+            locationButton.removeAttr('disabled').text('Send Location');;
         });
     }
     ,function(err){
