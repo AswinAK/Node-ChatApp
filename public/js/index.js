@@ -10,11 +10,19 @@ socket.on('disconnect',function(){
 });
 
 socket.on('incomingMessage',function(data){
-    var formattedTime = moment(data.createdAt).format('h:mm a');
-    console.log('Message received is ',JSON.stringify(data,undefined,2));
-    var li = jQuery('<li></li>');
-    li.text(`${data.from} ${formattedTime}: ${data.text}`);
-    jQuery('#mview').append(li);
+var formattedTime = moment(data.createdAt).format('h:mm a');
+var template = jQuery('#message-template').html();
+var html = Mustache.render(template,{
+    message: data.text,
+    from:data.from,
+    time:formattedTime
+});
+jQuery('#mview').append(html)
+    // 
+    // console.log('Message received is ',JSON.stringify(data,undefined,2));
+    // var li = jQuery('<li></li>');
+    // li.text(`${data.from} ${formattedTime}: ${data.text}`);
+    // jQuery('#mview').append(li);
 });
 
 socket.on('addLocation',function(data){

@@ -15,7 +15,7 @@
 
             <div id="map" style="height: 100%"></div>
             
-            <ol id= "mview" class="chat_messages"></ol>
+            <ol id= "mview" class="chat_messages" style="list-style-type:none"></ol>
 
             <div class="chat__footer">
                 <form id="message-form">
@@ -26,9 +26,24 @@
             </div>
         </div>
 
+        <script id="message-template" type="text/template">
+            <li class="message">
+                <div class="message__title">
+                    <h4>{{from}}</h4>
+                    <span>{{time}}</span>
+                </div>
+
+                <div class="message__body">
+                    {{message}}
+                </div>
+
+            </li>
+        </script>
+
         <script src="/socket.io/socket.io.js"></script>
         <script src="/js/libs/jquery-3.2.1.min.js"></script>
         <script src="/js/libs/moment.js"></script>
+        <script src="/js/libs/mustache.js"></script>
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAJPLLhGn6mYRTIqndAwMNLBHuLxsAiIWQ&callback=initMap"></script>
         <script src="/js/index.js"></script>
         
