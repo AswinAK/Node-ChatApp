@@ -3,7 +3,15 @@ var map;
 var locationButton = jQuery("#loc-button");
 socket.on('connect',function(){
     console.log('connection established..');
-    
+    var params = jQuery.deparam(window.location.search);
+    console.log('chart called with params ',params);
+    socket.emit('join',params,function(err){
+        if(err){
+            console.log('Error')
+            alert(err);
+            window.location.href = '/';
+        }
+    })
 });
 socket.on('disconnect',function(){
     console.log('connection disconnected..');
