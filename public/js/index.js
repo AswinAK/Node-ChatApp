@@ -9,20 +9,31 @@ socket.on('disconnect',function(){
     console.log('connection disconnected..');
 });
 
+function scrollToBottom(){
+    var messages = jQuery('#mview');
+    var newMessage = messages.children('li:last-child');
+
+    var clientHeight = messages.prop('clientHeight');
+    var scrollTop = messages.prop('scrollTop');
+    var scrollHeight = messages.prop('scrollHeight');
+    var newMessageHeight = newMessage.innerHeight();
+    var lastMessageHeight = newMessage.prev().innerHeight();
+
+    if(clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight){
+        messages.scrollTop(scrollHeight);
+    }
+}
+
 socket.on('incomingMessage',function(data){
-var formattedTime = moment(data.createdAt).format('h:mm a');
-var template = jQuery('#message-template').html();
-var html = Mustache.render(template,{
-    message: data.text,
-    from:data.from,
-    time:formattedTime
-});
-jQuery('#mview').append(html)
-    // 
-    // console.log('Message received is ',JSON.stringify(data,undefined,2));
-    // var li = jQuery('<li></li>');
-    // li.text(`${data.from} ${formattedTime}: ${data.text}`);
-    // jQuery('#mview').append(li);
+    var formattedTime = moment(data.createdAt).format('h:mm a');
+    var template = jQuery('#message-template').html();
+    var html = Mustache.render(template,{
+        message: data.text,
+        from:data.from,
+        time:formattedTime
+    });
+    jQuery('#mview').append(html);
+    scrollToBottom();
 });
 
 socket.on('addLocation',function(data){
@@ -40,9 +51,9 @@ socket.on('addLocation',function(data){
     var marker = new google.maps.Marker({
         position: myLatLng,
         map: map,
-        label:'dodo',
-        title: 'Hello World!'
+        label:'User X',
     });
+    scrollToBottom();
 });
 
 
