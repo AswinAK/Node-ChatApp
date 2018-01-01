@@ -13,8 +13,17 @@ socket.on('connect',function(){
         }
     })
 });
+
 socket.on('disconnect',function(){
     console.log('connection disconnected..');
+});
+
+socket.on('updateUserList',function(users){
+    var ol = jQuery('<ol></ol>');
+    users.forEach(function(user){
+        ol.append(`<li>${user}</li>`)
+    });
+    jQuery('#users').html(ol);
 });
 
 function scrollToBottom(){
@@ -66,6 +75,7 @@ socket.on('addLocation',function(data){
 
 
 jQuery("#message-form").on('submit',function(event){
+    console.log('user list is '),users;
     event.preventDefault();
     socket.emit('newMessage',{
         from:"abc@xyz.com",
