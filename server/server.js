@@ -37,16 +37,18 @@ io.on('connection',(socket)=>{
 
     socket.on('newMessage',(message,callback)=>{
         console.log('Message from client is ',JSON.stringify(message,undefined,2));
+        var user = users.getUser(socket.id);
         message.time = new Date().getTime();
-        io.emit('incomingMessage',message);
+        io.to(user.room).emit('incomingMessage',message);
         if(callback)callback()
     });
 
     socket.on('userLocation',(message,callback)=>{
+        var user = users.getUser(socket.id);
         console.log('Message from client is ',JSON.stringify(message,undefined,2));
         message.time = new Date().getTime();
-        io.emit('incomingMessage',generateMessage('a user',`At latitude:${message.latitude} longitude:${message.longitude}`));
-        io.emit('addLocation',generateMessage('a user',message));
+        io.to(user.room).emit('incomingMessage',generateMessage('a user',`At latitude:${message.latitude} longitude:${message.longitude}`));
+        io.to(user.room).emit('addLocation',generateMessage('a user',message));
         if(callback)callback(100)
     });
 
